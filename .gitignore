@@ -1,11 +1,19 @@
 *.class
+.DS_Store
+
+
 
 # Package Files #
 *.jar
 *.war
 *.ear
 
+### Gradle ###
+.gradle
+/build/
+
 # intelliJ Files
 .idea/*
 !.idea/IntelliVault.iml
 out/
+

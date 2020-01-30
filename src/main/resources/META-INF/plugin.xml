@@ -13,20 +13,8 @@
     ]]>
     </description>
 
-    <change-notes><![CDATA[
-     <ul>
-      <li>v0.9.1: Added logging of output to the console, removed extraneous dialog options.</li>
-      <li>v0.9.2: Fixing an issue where the temp directory isn't always deleted.</li>
-      <li>v0.9.3: Updates to plugin metadata.</li>
-      <li>v0.9.4: Merged PR from sdehandt; Added option to bypass message dialogs.  Also re-branded to Razorfish Platforms and added support for VLT 3.</li>
-      <li>v0.9.5: Fixed compile version to use JDK 1.6</li>
-      <li>v0.10.0: Added multiple repository profiles and ability to select from run dialogs.</li>
-      </ul>
-      ]]>
-    </change-notes>
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="145"/>
+    <idea-version since-build="171"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
