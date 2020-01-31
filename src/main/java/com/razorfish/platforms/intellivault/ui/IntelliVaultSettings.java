@@ -1,9 +1,5 @@
 package com.razorfish.platforms.intellivault.ui;
 
-import com.intellij.credentialStore.CredentialAttributes;
-import com.intellij.credentialStore.CredentialAttributesKt;
-import com.intellij.credentialStore.Credentials;
-import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
@@ -14,7 +10,6 @@ import com.razorfish.platforms.intellivault.config.IntelliVaultConfigDefaults;
 import com.razorfish.platforms.intellivault.config.IntelliVaultPreferences;
 import com.razorfish.platforms.intellivault.services.VaultInvokerService;
 import com.razorfish.platforms.intellivault.services.impl.IntelliVaultPreferencesService;
-import com.razorfish.platforms.intellivault.utils.IntelliVaultConstants;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -198,11 +193,6 @@ public class IntelliVaultSettings implements Configurable {
             if (deleteChoice == Messages.YES) {
                 comboProfileSelect.removeItem(selectedItem);
                 userPreferences.removeRepositoryConfiguration(((IntelliVaultCRXRepository) selectedItem).getName());
-
-                //remove it from the credentials store
-                CredentialAttributes credentialAttributes = new CredentialAttributes(CredentialAttributesKt.generateServiceName(IntelliVaultConstants.CREDENTIAL_STORE_SUBSYSTEM, selectedItemInstance.getName()));
-                Credentials credentials = null;
-                PasswordSafe.getInstance().set(credentialAttributes, credentials);
             }
         } else {
             log.warn("No option selected");
@@ -219,8 +209,8 @@ public class IntelliVaultSettings implements Configurable {
         IntelliVaultCRXRepository newRepo = new IntelliVaultCRXRepository(
                 repoName,
                 txtRepoUrl.getText(),
-                "username",
-                "password"
+                txtUsername.getText(),
+                txtPassword.getText()
         );
 
         // Check if this put request is replacing an old repository configuration.
@@ -243,10 +233,6 @@ public class IntelliVaultSettings implements Configurable {
                     txtPassword.getText()
             );
         }
-
-        CredentialAttributes credentialAttributes = new CredentialAttributes(CredentialAttributesKt.generateServiceName(IntelliVaultConstants.CREDENTIAL_STORE_SUBSYSTEM, repoName));
-        Credentials credentials = new Credentials( txtUsername.getText(), txtPassword.getText());
-        PasswordSafe.getInstance().set(credentialAttributes, credentials);
 
         rebuildRepositoryComboBox(newRepo);
     }

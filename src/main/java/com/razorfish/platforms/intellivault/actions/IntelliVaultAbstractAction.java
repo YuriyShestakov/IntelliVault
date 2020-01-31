@@ -83,22 +83,8 @@ public abstract class IntelliVaultAbstractAction extends AnAction {
                 repository = repoConfigList.get(0);
             }
 
-            //get username/password from credentials store before running the action
-            CredentialAttributes credentialAttributes = new CredentialAttributes(CredentialAttributesKt.generateServiceName(IntelliVaultConstants.CREDENTIAL_STORE_SUBSYSTEM, repository.getName()));
+            runAction(conf, vaultOpDir, project, repository);
 
-            Credentials credentials = PasswordSafe.getInstance().get(credentialAttributes);
-            if (credentials != null) {
-                String userName = credentials.getUserName();
-                String password = credentials.getPasswordAsString();
-
-
-                repository.setUsername(userName);
-                repository.setPassword(password);
-
-                runAction(conf, vaultOpDir, project, repository);
-            } else {
-                //TODO throw an error I guess?
-            }
         } else {
             Messages.showErrorDialog(
                     "You haven't set up any repositories yet. Go to File > Settings > IntelliVault to setup your repositories.",
