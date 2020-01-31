@@ -1,6 +1,10 @@
 package com.razorfish.platforms.intellivault.actions;
 
+import com.intellij.credentialStore.CredentialAttributes;
+import com.intellij.credentialStore.CredentialAttributesKt;
+import com.intellij.credentialStore.Credentials;
 import com.intellij.ide.IdeView;
+import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -19,6 +23,7 @@ import com.razorfish.platforms.intellivault.config.IntelliVaultPreferences;
 import com.razorfish.platforms.intellivault.services.IntelliVaultService;
 import com.razorfish.platforms.intellivault.services.impl.IntelliVaultPreferencesService;
 import com.razorfish.platforms.intellivault.ui.IntelliVaultRepositorySelector;
+import com.razorfish.platforms.intellivault.utils.IntelliVaultConstants;
 
 import java.util.List;
 
@@ -61,20 +66,38 @@ public abstract class IntelliVaultAbstractAction extends AnAction {
             Project project = evt.getData(PlatformDataKeys.PROJECT);
 
             List<IntelliVaultCRXRepository> repoConfigList = preferences.getRepoConfigList();
+            IntelliVaultCRXRepository repository = null;
+
             if (repoConfigList.size() > 1) {
                 // Shows the dialog that lets the user select one of their configured CRX Repositories.
                 final IntelliVaultRepositorySelector form = new IntelliVaultRepositorySelector(project, this);
                 form.show();
                 log.info("form exit code is " + form.getExitCode() + " we need " + DialogWrapper.OK_EXIT_CODE);
                 if (form.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-                    IntelliVaultCRXRepository repository = getSelectedIntelliVaultCRXRepository();
-                    runAction(conf, vaultOpDir, project, repository);
+                    repository = getSelectedIntelliVaultCRXRepository();
                 } else {
                     log.debug("User canceled action");
+                    return;
                 }
             } else {
-                IntelliVaultCRXRepository repository = repoConfigList.get(0);
+                repository = repoConfigList.get(0);
+            }
+
+            //get username/password from credentials store before running the action
+            CredentialAttributes credentialAttributes = new CredentialAttributes(CredentialAttributesKt.generateServiceName(IntelliVaultConstants.CREDENTIAL_STORE_SUBSYSTEM, repository.getName()));
+
+            Credentials credentials = PasswordSafe.getInstance().get(credentialAttributes);
+            if (credentials != null) {
+                String userName = credentials.getUserName();
+                String password = credentials.getPasswordAsString();
+
+
+                repository.setUsername(userName);
+                repository.setPassword(password);
+
                 runAction(conf, vaultOpDir, project, repository);
+            } else {
+                //TODO throw an error I guess?
             }
         } else {
             Messages.showErrorDialog(

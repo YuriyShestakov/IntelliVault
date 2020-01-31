@@ -10,7 +10,7 @@ The plugin can be found in the [JetBrains IDEA Plugin Repository](http://plugins
 
 The *IntelliVault* plugin is currently supported on the following Intellij products:
 
-* Intellij IDEA 2017.1++, Community and Ultimate Editions
+* Intellij IDEA 2017.3++, Community and Ultimate Editions
 
 ## Installation
 
@@ -46,7 +46,7 @@ For each repo, you must set the following properties:
 - **Repository Name**: Friendly name for this repo.
 - **CRX Repository URL**: URL for the repo, i.e. http://localhost:4502
 - **Username**: Username for connecting to the repository, ie. admin
-- **Password**: Password used for connecting to the repository, ie. admin.  **Note: the password is stored in plaintext.  It is therefore not recommended to use this plugin to connect to any instance other than for local development.**
+- **Password**: Password used for connecting to the repository, ie. admin.
 
 To edit an existing repository, select it from the drop down and edit the value as appropriate before clicking on the "Save Repo Config" button.  Likewise, you can delete a repository configuration by selecting it from the drop down and then clicking on "Delete Repo Config" (you will be prompted to confirm).
 

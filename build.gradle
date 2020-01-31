@@ -21,7 +21,7 @@ intellij {
     version '2019.3.2'
 }
 patchPluginXml {
-    sinceBuild '171'
+    sinceBuild '191'
     changeNotes """
       <ul>
           <li>v0.9.1: Added logging of output to the console, removed extraneous dialog options.</li>
@@ -30,7 +30,7 @@ patchPluginXml {
           <li>v0.9.4: Merged PR from sdehandt; Added option to bypass message dialogs.  Also re-branded to Razorfish Platforms and added support for VLT 3.</li>
           <li>v0.9.5: Fixed compile version to use JDK 1.6</li>
           <li>v0.10.0: Added multiple repository profiles and ability to select from run dialogs.</li>
-          <li>v0.11.0: Migrating development to the newer gradle format. Removed support for 2.x versions of vault, since 3.x was introoduced 5 years ago. Also updated sinceBuild to drop support for 2016.x and prior versions.</li>
+          <li>v0.11.0: Migrating development to the newer gradle format. Removed support for 2.x versions of vault, since 3.x was introoduced 5 years ago. Updated sinceBuild to drop support for 2018.x and prior versions. Changed the way credentials are persisted so they are always stored in a secure way rather than in plain text.</li>
       </ul>
       """
 }

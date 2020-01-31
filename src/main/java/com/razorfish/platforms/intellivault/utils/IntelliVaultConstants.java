@@ -20,4 +20,6 @@ public class IntelliVaultConstants {
 
     public static final String JCR_ROOT = "jcr_root";
 
+    public static final String CREDENTIAL_STORE_SUBSYSTEM = "com.razorfish.platforms.intellivault";
+
 }

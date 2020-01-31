@@ -1,5 +1,9 @@
 package com.razorfish.platforms.intellivault.services.impl;
 
+import com.intellij.credentialStore.CredentialAttributes;
+import com.intellij.credentialStore.CredentialAttributesKt;
+import com.intellij.credentialStore.Credentials;
+import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -23,6 +27,7 @@ public class IntelliVaultPreferencesService implements PersistentStateComponent<
         if (preferences.repoConfigList == null || preferences.repoConfigList.size() == 0) {
             preferences.repoConfigList = preferences.getDefaultRepos();
         }
+
 
         return (IntelliVaultPreferences) preferences.clone();
     }
