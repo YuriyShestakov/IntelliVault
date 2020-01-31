@@ -37,8 +37,6 @@ Open the IntelliVault configuration dialog accessible via **Preferences** > **To
     - **Show Operation Confirmation Dialogs** When checked, each operation will be confirmed before proceeding.  Uncheck to bypass  those confirmations.
     - **Verbose VLT Output** Passes the verbose flag to VLT when performing operations.
     
-    
-
 ### Multi-Repository Configuration
 
 IntelliVault allows you to configure and manage multiple repositories to operate against.
