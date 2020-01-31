@@ -14,23 +14,22 @@ The *IntelliVault* plugin is currently supported on the following Intellij produ
 
 ## Installation
 
-To install the plugin using the Intellij built-in plugin management dialog, go to **Preferences** > **Plugins** > **Browse Repositories**, type *Intellivault* and click the **Install** button.
+To install the plugin using the Intellij built-in plugin management dialog by going to **Preferences** > **Plugins**.  From there search for "IntelliVault" and choose install.
 
 NOTE: If after installing the plugin and restarting the IDE you don't see the **IntelliVault** option under **Tools** then your version is most likely not supported.
 
 ## Setting up Vault CLI
 
-IntelliVault uses the [Filevault CLI](https://docs.adobe.com/content/help/en/experience-manager-65/developing/devtools/ht-vlttool.html) under the covers to transfer content between IDEA and your AEM repository.  This is a hard dependency, and requires downloading and unpacking Filevault CLI v3.2+ before you can configure the plugin.
+IntelliVault uses the [Filevault CLI](https://docs.adobe.com/content/help/en/experience-manager-65/developing/devtools/ht-vlttool.html) under the covers to transfer content between IDEA and your AEM repository.  This is a hard dependency, and requires the user to download and unpack Filevault CLI v3.2+ before you can configure the plugin.
 
-You can download the filevault CLI from https://repo1.maven.org/maven2/org/apache/jackrabbit/vault/vault-cli/. Be sure you download the binary artifact, version 3.2 or greater, e.g. https://repo1.maven.org/maven2/org/apache/jackrabbit/vault/vault-cli/3.4.2/vault-cli-3.4.2-bin.zip.  Once the download has completed, locate it in your Downloads directory and unpack it to the directory of your choice.
+You can download the FileVault CLI from https://repo1.maven.org/maven2/org/apache/jackrabbit/vault/vault-cli/. Be sure you download the binary artifact, version 3.2 or greater, e.g. https://repo1.maven.org/maven2/org/apache/jackrabbit/vault/vault-cli/3.4.2/vault-cli-3.4.2-bin.zip.  Once the download has completed, locate it in your Downloads directory and unpack it to the directory of your choice.
 
 ## Configuration
 
-Open the plugin configuration dialog accessible via **Preferences** > **Tools** > **IntelliVault** and set the following properties.
+Open the IntelliVault configuration dialog accessible via **Preferences** > **Tools** > **IntelliVault** and set the following properties.
 
 - **Vault Directory**: Set this to the directory where you unpacked Filevault, ie. `/Users/myuser/dev/tools/vault/vault-cli-3.4.2/bin`
 - **Repository**: See `Multi-Repository Configuration` below
-- **Show Operation Confirmation Dialogs**: If checked, IntelliVault will prompt you to comfirm each operation.  Uncheck this to remove those confirmations
 - **Nitpicky Details** These properties are optional and shouldn't require changes under normal setups:
     - **Temp Directory** Where the plugin will store working files.  Defaults to the `java.io.tmpdir`
     - **File Ignore Patterns** A comma delimited list of patterns to ignore for VLT operations
@@ -42,14 +41,16 @@ Open the plugin configuration dialog accessible via **Preferences** > **Tools** 
 
 ### Multi-Repository Configuration
 
-IntelliVault allows you to configure and manage multiple repositories.  If more than one repo is configured, you will be prompted to select a repo for each operation.  If only one repo exists, that repo will be used without any prompt.
+IntelliVault allows you to configure and manage multiple repositories to operate against.
 
-For each repo, you must set the following:
+For each repo, you must set the following properties:
 
 - **Repository Name**: Friendly name for this repo.
 - **CRX Repository URL**: URL for the repo, i.e. http://localhost:4502
 - **Username**: Username for connecting to the repository, ie. admin
 - **Password**: Password used for connecting to the repository, ie. admin.  **Note: the password is stored in plaintext.  It is therefore not recommended to use this plugin to connect to any instance other than for local development.**
+
+To edit an existing repository, select it from the drop down and edit the value as appropriate before clicking on the "Save Repo Config" button.  Likewise, you can delete a repository configuration by selecting it from the drop down and then clicking on "Delete Repo Config" (you will be prompted to confirm).
 
 When you first install the plugin, it will load 2 pre-configured repositories:
 
