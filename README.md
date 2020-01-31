@@ -10,7 +10,7 @@ The plugin can be found in the [JetBrains IDEA Plugin Repository](http://plugins
 
 The *IntelliVault* plugin is currently supported on the following Intellij products:
 
-* Intellij IDEA 2017.1++ Community/Ultimate
+* Intellij IDEA 2017.1++, Community and Ultimate Editions
 
 ## Installation
 
@@ -26,12 +26,19 @@ You can download the filevault CLI from https://repo1.maven.org/maven2/org/apach
 
 ## Configuration
 
-Oopen the plugin configuration dialog accessible via **Preferences** > **Tools** > **IntelliVault** and set the following properties.
+Open the plugin configuration dialog accessible via **Preferences** > **Tools** > **IntelliVault** and set the following properties.
 
-- **Vault Directory**: Set this to the directory where you unpacked Filevault, ie. `/Users/myuser/dev/tools/vault/vault-cli-3.1.38/bin`
+- **Vault Directory**: Set this to the directory where you unpacked Filevault, ie. `/Users/myuser/dev/tools/vault/vault-cli-3.4.2/bin`
 - **Repository**: See `Multi-Repository Configuration` below
 - **Show Operation Confirmation Dialogs**: If checked, IntelliVault will prompt you to comfirm each operation.  Uncheck this to remove those confirmations
-- Other properties are optional and shouldn't require changes, but should be self-explanatory if/when changes are required
+- **Nitpicky Details** These properties are optional and shouldn't require changes under normal setups:
+    - **Temp Directory** Where the plugin will store working files.  Defaults to the `java.io.tmpdir`
+    - **File Ignore Patterns** A comma delimited list of patterns to ignore for VLT operations
+    - **JCR Root Directory** The name of the directory wwithin your project corresponding to the JCR Root Node
+    - **Show Operation Confirmation Dialogs** When checked, each operation will be confirmed before proceeding.  Uncheck to bypass  those confirmations.
+    - **Verbose VLT Output** Passes the verbose flag to VLT when performing operations.
+    
+    
 
 ### Multi-Repository Configuration
 
@@ -48,3 +55,11 @@ When you first install the plugin, it will load 2 pre-configured repositories:
 
 - an author instance running on localhost:4502, with the default credentials of admin/admin
 - a publish instance on localhost:4503, with the default credentials of admin/admin
+
+## Usage
+
+The plugin contains only 2 actions, which operate based on the context.  To invoke an import or export, right click on any directory which is a sub-directory of jcr_root (or equivalent if you have changed the JCR Root Directory setting).  Find the IntelliVault menu, then select either "Pull from CRX..." to export, or "Push to CRX..." to import.  If you have more than one repository configured, you will be prompted to select a repository.  The last repository selected will always be the default selection for sub-sequent operations.  Select the proper repository and click OK to proceed.  Then confirm the operation (if Show Operation Confirmation Dialogs is set ot true).  You may want to double check that the host, port, path, etc. are all correct before proceeding.
+
+After providing confirmation, Vault will proceed to do it's thing, importing/exporting the content as specified.  If something goes wrong, [file a bug](https://github.com/shsteimer/IntelliVault/issues).
+
+
