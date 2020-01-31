@@ -91,9 +91,6 @@ public class VaultInvokerServiceImpl implements VaultInvokerService {
                     try {
                         libList.add(lib.toURI().toURL());
                         String libName = lib.getName();
-                        if (libName.contains("vault-vlt-3")) {
-                            isVault3 = true;
-                        }
                     } catch (IOException e) {
                         log.error("error loading lib " + lib.getAbsolutePath(), e);
                     }

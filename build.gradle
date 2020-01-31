@@ -34,3 +34,7 @@ patchPluginXml {
       </ul>
       """
 }
+
+publishPlugin {
+    hasCustomActions
+}
