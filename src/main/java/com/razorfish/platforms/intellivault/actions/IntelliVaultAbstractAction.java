@@ -87,7 +87,7 @@ public abstract class IntelliVaultAbstractAction extends AnAction {
 
         } else {
             Messages.showErrorDialog(
-                    "You haven't set up any repositories yet. Go to File > Settings > IntelliVault to setup your repositories.",
+                    "You haven't set up any repositories yet. Go to IntelliJ IDEA > Preferences > Tools > IntelliVault to setup your repositories.",
                     "Cannot Perform Action");
         }
     }

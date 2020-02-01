@@ -21,7 +21,6 @@ intellij {
     version '2019.3.2'
 }
 patchPluginXml {
-    sinceBuild '191'
     changeNotes """
       <ul>
           <li>v0.9.1: Added logging of output to the console, removed extraneous dialog options.</li>

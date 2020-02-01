@@ -7,6 +7,7 @@ import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.diagnostic.Logger;
 import com.razorfish.platforms.intellivault.config.IntelliVaultCRXRepository;
 import com.razorfish.platforms.intellivault.config.IntelliVaultPreferences;
 import com.razorfish.platforms.intellivault.utils.IntelliVaultConstants;
@@ -25,6 +26,8 @@ public class IntelliVaultPreferencesService implements PersistentStateComponent<
 
     private IntelliVaultPreferences preferences;
 
+    private static final Logger log = Logger.getInstance(IntelliVaultPreferencesService.class);
+
     public IntelliVaultPreferences getPreferences() {
         if (preferences == null) {
             preferences = new IntelliVaultPreferences();
@@ -34,55 +37,22 @@ public class IntelliVaultPreferencesService implements PersistentStateComponent<
             preferences.repoConfigList = preferences.getDefaultRepos();
         }
 
-        IntelliVaultPreferences clone = (IntelliVaultPreferences) preferences.clone();
-        clone.getRepoConfigList().forEach(repo -> {
-            String name = repo.getName();
-
-            CredentialAttributes credentialAttributes = createCredentialAttributes(name);
-
-            Credentials credentials = PasswordSafe.getInstance().get(credentialAttributes);
-            if (credentials != null) {
-                String username = credentials.getUserName();
-                String password = credentials.getPasswordAsString();
-
-                repo.setUsername(username);
-                repo.setPassword(password);
-            } else {
-                //todo log an error
-            }
-        });
-
-        return clone;
+        return (IntelliVaultPreferences) preferences.clone();
     }
 
     public void setPreferences(IntelliVaultPreferences preferences) {
-        final Set<String> newRepoNames = new HashSet<>();
-        preferences.getRepoConfigList().forEach(repo -> {
-            String name = repo.getName();
-            newRepoNames.add(name);
-
-            String username = repo.getUsername();
-            String password = repo.getPassword();
-
-            CredentialAttributes credentialAttributes = createCredentialAttributes(name);
-            Credentials credentials = new Credentials(username, password);
-            PasswordSafe.getInstance().set(credentialAttributes, credentials);
-
-            repo.setUsername("username");
-            repo.setPassword("password");
-        });
-
-        //get the previous repo names, then remove new ones, leaving only those that were deleted
-        Set<String> previousRepoNames = this.preferences.getRepoConfigList().stream().map(IntelliVaultCRXRepository::getName).collect(Collectors.toSet());
-        previousRepoNames.removeAll(newRepoNames);
-
-        for (String repoName : previousRepoNames) {
-            CredentialAttributes credentialAttributes = createCredentialAttributes(repoName);
-            //set null to remove
-            PasswordSafe.getInstance().set(credentialAttributes, null);
-        }
-
         this.preferences = preferences;
+    }
+
+    private void storeCredentials(String repoName, Credentials credentials) {
+        CredentialAttributes credentialAttributes = createCredentialAttributes(repoName);
+        PasswordSafe.getInstance().set(credentialAttributes, credentials);
+    }
+
+    private Credentials retrieveCredentials(String repoName) {
+        CredentialAttributes credentialAttributes = createCredentialAttributes(repoName);
+
+        return PasswordSafe.getInstance().get(credentialAttributes);
     }
 
     private CredentialAttributes createCredentialAttributes(String repoName) {
@@ -92,11 +62,54 @@ public class IntelliVaultPreferencesService implements PersistentStateComponent<
     @Nullable
     @Override
     public IntelliVaultPreferences getState() {
-        return getPreferences();
+        IntelliVaultPreferences preferences = getPreferences();
+
+        final Set<String> newRepoNames = new HashSet<>();
+        preferences.getRepoConfigList().forEach(repo -> {
+            String name = repo.getName();
+            newRepoNames.add(name);
+
+            String username = repo.getUsername();
+            String password = repo.getPassword();
+
+            Credentials credentials = new Credentials(username, password);
+            storeCredentials(name, credentials);
+
+            repo.setUsername(null);
+            repo.setPassword(null);
+        });
+
+        //get the previous repo names, then remove new ones, leaving only those that were deleted
+        if (this.preferences != null && this.preferences.getRepoConfigList() != null) {
+            Set<String> previousRepoNames = this.preferences.getRepoConfigList().stream().map(IntelliVaultCRXRepository::getName).collect(Collectors.toSet());
+            previousRepoNames.removeAll(newRepoNames);
+
+            for (String repoName : previousRepoNames) {
+                //set null to remove
+                storeCredentials(repoName, null);
+            }
+        }
+
+        return preferences;
     }
 
     @Override
     public void loadState(IntelliVaultPreferences preferences) {
+        preferences.getRepoConfigList().forEach(repo -> {
+            String name = repo.getName();
+
+            Credentials credentials = retrieveCredentials(name);
+            if (credentials != null) {
+                String username = credentials.getUserName();
+                String password = credentials.getPasswordAsString();
+
+                repo.setUsername(username);
+                repo.setPassword(password);
+            } else {
+                log.error("Unable to retrieve credentials for repository: " + name);
+            }
+        });
+
         setPreferences(preferences);
     }
 }

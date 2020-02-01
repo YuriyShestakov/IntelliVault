@@ -18,7 +18,7 @@ public class IntelliVaultConfigDefaults {
     public static final String REPO_NAME_PUBLISH = "publish";
 
     public static final String REPO_URL = "http://localhost:4502";
-    public static final String REPO_URL_PUBLISH = "http://localhost:4502";
+    public static final String REPO_URL_PUBLISH = "http://localhost:4503";
     public static final String REPO_USER = "admin";
     public static final String REPO_PASSWORD = "admin";
 
